@@ -23,6 +23,10 @@
     .modal{position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:50;display:flex;align-items:center;justify-content:center;padding:20px}.modalbox{width:min(100%,980px);max-height:90vh;overflow:auto;background:#07101c;border:1px solid #243247;border-radius:20px;box-shadow:var(--shadow)}.modalhead{display:flex;justify-content:space-between;align-items:center;padding:20px 22px;border-bottom:1px solid var(--line)}.modalhead h3{margin:0}.close{background:transparent;border:0;color:#fff;font-size:26px;cursor:pointer}.login{padding:28px;max-width:420px;margin:auto}.field{display:grid;gap:7px;margin-bottom:14px}.field label{font-size:13px;color:#cbd5e1}.field input,.field select{width:100%;background:#0f172a;border:1px solid #334155;color:#fff;padding:12px 13px;border-radius:10px}.primary{width:100%;padding:12px 14px;border:0;border-radius:10px;background:var(--blue);color:#fff;font-weight:700;cursor:pointer}.hint{font-size:12px;color:#64748b;margin-top:12px;line-height:1.5}.admin{padding:22px}.admin-grid{display:grid;grid-template-columns:220px 1fr;gap:18px}.admin-menu{border-right:1px solid var(--line);padding-right:18px}.admin-menu button{width:100%;text-align:left;margin-bottom:8px;padding:11px;border-radius:10px;border:0;background:#0f172a;color:#fff;cursor:pointer}.admin-main h4{margin:0 0 16px;font-size:24px}.table{width:100%;border-collapse:collapse}.table th,.table td{padding:12px 10px;border-bottom:1px solid var(--line);text-align:left;font-size:13px}.qty{width:72px;background:#0f172a;border:1px solid #334155;color:#fff;padding:8px;border-radius:8px}.edit-price{width:90px;background:#0f172a;border:1px solid #334155;color:#fff;padding:8px;border-radius:8px}.danger{background:#3f1218!important}.success-note{color:#86efac;font-size:13px;margin-top:12px}.add-form{display:grid;grid-template-columns:2fr 1fr 1fr 2fr auto;gap:10px;margin:16px 0}.add-form input{background:#0f172a;border:1px solid #334155;color:#fff;padding:10px;border-radius:9px}.add-form button{border:0;border-radius:9px;background:var(--green);font-weight:700;padding:0 14px;cursor:pointer}
     @media(max-width:900px){.navlinks a{display:none}.split,.robots{grid-template-columns:1fr}.products{grid-template-columns:repeat(2,1fr)}.features{grid-template-columns:repeat(2,1fr)}.card-content{max-width:90%}.admin-grid{grid-template-columns:1fr}.admin-menu{border-right:0;border-bottom:1px solid var(--line);padding:0 0 10px}.add-form{grid-template-columns:1fr 1fr}.add-form input:nth-child(4){grid-column:1/-1}}
     @media(max-width:600px){.wrap{padding:0 16px}.hero{padding-top:34px}.card{min-height:430px}.card-content{padding:28px;max-width:100%}.card h2{font-size:36px}.products,.features{grid-template-columns:1fr}.table{font-size:12px;display:block;overflow:auto}.add-form{grid-template-columns:1fr}.add-form input:nth-child(4){grid-column:auto}.brand{font-size:24px}}
+
+    .buy-btn{border:0;border-radius:10px;padding:10px 12px;background:var(--blue);color:white;cursor:pointer;font-weight:700}
+    .order-summary{background:#0f172a;border:1px solid #334155;border-radius:12px;padding:14px;margin:14px 0;line-height:1.7}
+    .order-actions{display:flex;gap:10px;flex-wrap:wrap}.secondary{padding:12px 14px;border:1px solid #334155;border-radius:10px;background:#0f172a;color:#fff;cursor:pointer}
   </style>
 </head>
 <body>
@@ -65,6 +69,29 @@
   <div class="admin hidden" id="adminBox"><div class="admin-grid"><aside class="admin-menu"><button>Productos y stock</button><button id="resetBtn" class="danger">Restablecer demo</button><button id="logoutBtn">Cerrar sesión</button></aside><div class="admin-main"><h4>Productos y stock</h4><div class="add-form"><input id="newName" placeholder="Nombre"><input id="newPrice" type="number" step="0.01" placeholder="Precio"><input id="newStock" type="number" placeholder="Stock"><input id="newImage" placeholder="URL de imagen"><button id="addBtn">Añadir</button></div><div style="overflow:auto"><table class="table"><thead><tr><th>Producto</th><th>Precio €</th><th>Stock</th><th>Acciones</th></tr></thead><tbody id="adminRows"></tbody></table></div><div class="success-note" id="saveNote"></div></div></div></div>
 </div></div>
 
+
+<div class="modal hidden" id="orderModal"><div class="modalbox" style="max-width:560px">
+  <div class="modalhead"><h3>Pedido VicDomotic</h3><button class="close" id="closeOrder">×</button></div>
+  <form class="login" id="orderForm" action="https://formsubmit.co/jgarciawind@gmail.com" method="POST">
+    <input type="hidden" name="_subject" id="orderSubject" value="Nuevo pedido VicDomotic">
+    <input type="hidden" name="_captcha" value="false">
+    <input type="hidden" name="Producto" id="orderProduct">
+    <input type="hidden" name="Precio_unitario" id="orderUnitPrice">
+    <input type="hidden" name="Gastos_envio" value="3.00 €">
+    <input type="hidden" name="Total" id="orderTotalHidden">
+    <div class="field"><label>Producto</label><input id="orderProductView" disabled></div>
+    <div class="field"><label>Cantidad</label><input id="orderQty" name="Cantidad" type="number" min="1" value="1" required></div>
+    <div class="field"><label>Nombre y apellidos</label><input name="Nombre" required></div>
+    <div class="field"><label>Email</label><input name="Email_cliente" type="email" required></div>
+    <div class="field"><label>Teléfono</label><input name="Telefono" required></div>
+    <div class="field"><label>Dirección de envío</label><input name="Direccion_envio" required></div>
+    <div class="field"><label>CP / Ciudad</label><input name="CP_Ciudad" required></div>
+    <div class="order-summary" id="orderSummary"></div>
+    <div class="order-actions"><button class="primary" type="submit">Realizar pedido</button><button class="secondary" type="button" id="cancelOrder">Cancelar</button></div>
+    <div class="hint">Los pedidos se envían a jgarciawind@gmail.com. La primera vez, FormSubmit puede pedir confirmar el correo receptor.</div>
+  </form>
+</div></div>
+
 <script>
   const DEMO_PASSWORD = 'vicdomotic';
   const DEFAULT_PRODUCTS = [
@@ -74,7 +101,7 @@
   ];
   let products = JSON.parse(localStorage.getItem('vicdomotic_products') || 'null') || DEFAULT_PRODUCTS;
   const save=()=>{localStorage.setItem('vicdomotic_products',JSON.stringify(products));renderProducts();renderAdmin();document.getElementById('saveNote').textContent='Cambios guardados en este navegador.'}
-  function renderProducts(){const grid=document.getElementById('productGrid');grid.innerHTML=products.map(p=>`<article class="product"><img src="${p.img||'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=900&q=80'}" alt="${p.name}"><h4>${p.name}</h4><div class="price-row"><span class="price">${Number(p.price).toFixed(2)} €</span><span class="stock ${p.stock>0?'ok':'no'}">${p.stock>0?'Stock: '+p.stock:'Agotado'}</span></div><button class="small-btn" ${p.stock<=0?'disabled':''}>${p.stock>0?'Consultar':'Sin stock'}</button></article>`).join('')}
+  function renderProducts(){const grid=document.getElementById('productGrid');grid.innerHTML=products.map((p,i)=>`<article class="product"><img src="${p.img||'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=900&q=80'}" alt="${p.name}"><h4>${p.name}</h4><div class="price-row"><span class="price">${Number(p.price).toFixed(2)} €</span><span class="stock ${p.stock>0?'ok':'no'}">${p.stock>0?'Stock: '+p.stock:'Agotado'}</span></div><button class="buy-btn" ${p.stock<=0?'disabled':''} onclick="openOrder(${i})">${p.stock>0?'Comprar':'Sin stock'}</button></article>`).join('')}
   function renderAdmin(){const body=document.getElementById('adminRows');body.innerHTML=products.map((p,i)=>`<tr><td>${p.name}</td><td><input class="edit-price" type="number" step="0.01" value="${p.price}" onchange="products[${i}].price=Number(this.value);save()"></td><td><input class="qty" type="number" value="${p.stock}" onchange="products[${i}].stock=Number(this.value);save()"></td><td><button class="small-btn" onclick="products.splice(${i},1);save()">Eliminar</button></td></tr>`).join('')}
   document.getElementById('openAdmin').onclick=()=>document.getElementById('adminModal').classList.remove('hidden');
   document.getElementById('closeAdmin').onclick=()=>document.getElementById('adminModal').classList.add('hidden');
@@ -82,6 +109,36 @@
   document.getElementById('logoutBtn').onclick=()=>{document.getElementById('adminBox').classList.add('hidden');document.getElementById('loginBox').classList.remove('hidden');document.getElementById('adminPass').value=''};
   document.getElementById('resetBtn').onclick=()=>{if(confirm('¿Restablecer los productos de demostración?')){products=JSON.parse(JSON.stringify(DEFAULT_PRODUCTS));save()}};
   document.getElementById('addBtn').onclick=()=>{const name=document.getElementById('newName').value.trim();if(!name)return alert('Escribe un nombre');products.push({id:Date.now(),name,price:Number(document.getElementById('newPrice').value||0),stock:Number(document.getElementById('newStock').value||0),img:document.getElementById('newImage').value.trim()});['newName','newPrice','newStock','newImage'].forEach(id=>document.getElementById(id).value='');save()};
+
+  let selectedOrderIndex = null;
+  const SHIPPING = 3;
+  function openOrder(i){
+    selectedOrderIndex=i;
+    const p=products[i];
+    document.getElementById('orderProduct').value=p.name;
+    document.getElementById('orderProductView').value=p.name;
+    document.getElementById('orderUnitPrice').value=Number(p.price).toFixed(2)+' €';
+    document.getElementById('orderSubject').value='Nuevo pedido VicDomotic - '+p.name;
+    document.getElementById('orderQty').max=Math.max(1,p.stock);
+    document.getElementById('orderQty').value=1;
+    updateOrderTotal();
+    document.getElementById('orderModal').classList.remove('hidden');
+  }
+  function updateOrderTotal(){
+    if(selectedOrderIndex===null)return;
+    const p=products[selectedOrderIndex];
+    let q=Math.max(1,Number(document.getElementById('orderQty').value||1));
+    if(p.stock>0) q=Math.min(q,p.stock);
+    document.getElementById('orderQty').value=q;
+    const subtotal=q*Number(p.price);
+    const total=subtotal+SHIPPING;
+    document.getElementById('orderSummary').innerHTML=`${q} × ${Number(p.price).toFixed(2)} € = ${subtotal.toFixed(2)} €<br>Envío = ${SHIPPING.toFixed(2)} €<br><strong>Total = ${total.toFixed(2)} €</strong>`;
+    document.getElementById('orderTotalHidden').value=total.toFixed(2)+' €';
+  }
+  document.getElementById('orderQty').addEventListener('input',updateOrderTotal);
+  document.getElementById('closeOrder').onclick=()=>document.getElementById('orderModal').classList.add('hidden');
+  document.getElementById('cancelOrder').onclick=()=>document.getElementById('orderModal').classList.add('hidden');
+
   renderProducts();
 </script>
 </body></html>
