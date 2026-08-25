@@ -96,7 +96,7 @@
   const DEMO_PASSWORD = 'vicdomotic';
   const DEFAULT_PRODUCTS = [
     {id:1,name:'ESP32 DevKit V1',price:5.00,stock:3,img:'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=900&q=80'},
-    {id:2,name:'Sensor DHT11',price:3.50,stock:15,img:'https://images.unsplash.com/photo-1553406830-ef2513450d76?auto=format&fit=crop&w=900&q=80'},
+    {id:2,name:'Sensor DHT11',price:3.50,stock:15,img:'dht11.svg'},
     {id:3,name:'Relé 1 canal 5V',price:2.80,stock:8,img:'https://images.unsplash.com/photo-1563770660941-20978e870e26?auto=format&fit=crop&w=900&q=80'}
   ];
   let products = JSON.parse(localStorage.getItem('vicdomotic_products') || 'null') || DEFAULT_PRODUCTS;
