@@ -82,6 +82,23 @@ h1 {
 .heart-btn:active { transform: scale(0.95); }
 .heart-btn .icon { font-size: 1.6rem; }
 
+.robot-links { margin-top: 15px; }
+.robot-btn {
+  display: inline-block;
+  background: linear-gradient(135deg, #7c3aed, #a855f7);
+  color: white;
+  text-decoration: none;
+  padding: 12px 28px;
+  border-radius: 60px;
+  font-size: 1rem;
+  font-weight: 700;
+  font-family: inherit;
+  box-shadow: 0 8px 32px rgba(124,58,237,0.3);
+  transition: all 0.3s ease;
+}
+.robot-btn:hover { transform: scale(1.05); box-shadow: 0 12px 48px rgba(124,58,237,0.5); }
+.robot-btn:active { transform: scale(0.95); }
+
 @keyframes floatUp {
   0% { opacity: 1; transform: translateY(0) scale(0); }
   50% { opacity: 1; transform: translateY(-200px) scale(1.2); }
@@ -104,6 +121,12 @@ h1 {
     <span class="icon">💗</span>
     Amistat!
   </button>
+
+  <div class="robot-links">
+    <a class="robot-btn" href="https://duskoi.github.io/vicdomotic/#robots">
+      🤖 Alquiler de Robots Humanoides
+    </a>
+  </div>
 </div>
 
 <script>
