@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>💃 Ona</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;600;800&display=swap');
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: linear-gradient(160deg, #0a0f1e 0%, #1e1233 50%, #2a1240 100%);
+  color: #e2e8f0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.container { text-align: center; padding: 30px; max-width: 500px; }
+
+h1 {
+  font-size: 5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #ec4899, #a855f7, #f97316);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 8px;
+  animation: glow 3s ease-in-out infinite;
+}
+@keyframes glow {
+  0%,100% { filter: drop-shadow(0 0 10px rgba(236,72,153,0.3)); }
+  50% { filter: drop-shadow(0 0 25px rgba(236,72,153,0.6)); }
+}
+.sub { color: #94a3b8; font-size: 1rem; margin-bottom: 40px; }
+
+.emoji-dance {
+  font-size: 6rem;
+  display: inline-block;
+  margin-bottom: 30px;
+  animation: sway 2s ease-in-out infinite;
+}
+@keyframes sway {
+  0%,100% { transform: rotate(-15deg) scale(1); }
+  50% { transform: rotate(15deg) scale(1.1); }
+}
+
+/* Button */
+.btn-ona {
+  background: linear-gradient(135deg, #ec4899, #a855f7);
+  color: white;
+  border: none;
+  padding: 22px 55px;
+  border-radius: 60px;
+  font-size: 1.6rem;
+  font-weight: 800;
+  cursor: pointer;
+  font-family: inherit;
+  letter-spacing: 1px;
+  box-shadow: 0 8px 32px rgba(236,72,153,0.3);
+  transition: all 0.3s ease;
+}
+.btn-ona:hover { transform: scale(1.08); box-shadow: 0 12px 48px rgba(236,72,153,0.5); }
+.btn-ona:active { transform: scale(0.95); }
+
+/* Message */
+#message {
+  margin-top: 35px;
+  font-size: 3.5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #f97316, #ec4899, #a855f7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  opacity: 0;
+  transform: scale(0.3) rotate(-10deg);
+  transition: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+#message.show {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+}
+
+/* Dancing emojis */
+.dancer {
+  position: fixed;
+  font-size: 2.5rem;
+  z-index: 999;
+  pointer-events: none;
+  animation: danceAround 3s ease-in-out infinite;
+  opacity: 0;
+}
+@keyframes danceAround {
+  0% { opacity: 0; transform: translateY(0) rotate(0); }
+  20% { opacity: 1; }
+  50% { transform: translateY(-60px) rotate(20deg); }
+  80% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-120px) rotate(-20deg); }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="emoji-dance">💃</div>
+  <h1>Ona</h1>
+  <div class="sub">Prem el botó i a ballar! 🎶</div>
+
+  <button class="btn-ona" onclick="bailar()">🎵 BAILLEM!</button>
+
+  <div id="message">💃 Vamos a bailar! 🕺</div>
+</div>
+
+<script>
+function bailar() {
+  const msg = document.getElementById('message');
+  msg.classList.add('show');
+
+  // Dancing emojis everywhere
+  const dancers = ['💃','🕺','🎶','💜','✨','🎵','💃','🕺'];
+  for (let i = 0; i < 12; i++) {
+    setTimeout(() => {
+      const el = document.createElement('div');
+      el.className = 'dancer';
+      el.textContent = dancers[Math.floor(Math.random() * dancers.length)];
+      el.style.left = (5 + Math.random() * 90) + '%';
+      el.style.top = (20 + Math.random() * 60) + '%';
+      el.style.animationDelay = Math.random() * 2 + 's';
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 5000);
+    }, i * 120);
+  }
+}
+</script>
+</body>
+</html>
