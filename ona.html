@@ -82,6 +82,21 @@ h1 {
   transform: scale(1) rotate(0deg);
 }
 
+/* Signature */
+.signature {
+  margin-top: 15px;
+  font-size: 1.2rem;
+  color: #c084fc;
+  font-weight: 600;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.6s ease 0.4s;
+}
+.signature.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 /* Dancing emojis */
 .dancer {
   position: fixed;
@@ -108,13 +123,15 @@ h1 {
 
   <button class="btn-ona" onclick="bailar()">🎵 BAILLEM!</button>
 
-  <div id="message">💃 Vamos a bailar! 🕺</div>
+  <div id="message">💃 Ona, vamos a bailar! 🕺</div>
+  <div class="signature" id="signature">— amb amor, Ivan 💜</div>
 </div>
 
 <script>
 function bailar() {
   const msg = document.getElementById('message');
   msg.classList.add('show');
+  document.getElementById('signature').classList.add('show');
 
   // Dancing emojis everywhere
   const dancers = ['💃','🕺','🎶','💜','✨','🎵','💃','🕺'];
