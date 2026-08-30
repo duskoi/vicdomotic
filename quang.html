@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🍜 Quang</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;600;800&display=swap');
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: linear-gradient(160deg, #0a0f1e 0%, #0f1e2e 50%, #123128 100%);
+  color: #e2e8f0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.container { text-align: center; padding: 30px; max-width: 480px; }
+
+h1 {
+  font-size: 4.5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #eab308, #f97316, #ef4444);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 8px;
+  animation: glow 3s ease-in-out infinite;
+}
+@keyframes glow {
+  0%,100% { filter: drop-shadow(0 0 10px rgba(234,179,8,0.3)); }
+  50% { filter: drop-shadow(0 0 25px rgba(234,179,8,0.6)); }
+}
+.sub { color: #94a3b8; font-size: 1rem; margin-bottom: 35px; }
+
+/* Button */
+.btn-quang {
+  background: linear-gradient(135deg, #eab308, #f97316);
+  color: #1a1a1a;
+  border: none;
+  padding: 22px 55px;
+  border-radius: 60px;
+  font-size: 1.8rem;
+  font-weight: 800;
+  cursor: pointer;
+  font-family: inherit;
+  letter-spacing: 1px;
+  box-shadow: 0 8px 32px rgba(234,179,8,0.3);
+  transition: all 0.3s ease;
+}
+.btn-quang:hover { transform: scale(1.08); box-shadow: 0 12px 48px rgba(234,179,8,0.5); }
+.btn-quang:active { transform: scale(0.95); }
+
+/* Photo reveal */
+.photo-reveal {
+  margin-top: 25px;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 3px solid transparent;
+  background: linear-gradient(135deg, #eab308, #f97316) border-box;
+  -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  max-height: 0;
+  opacity: 0;
+  transform: scale(0.8);
+  transition: all 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  box-shadow: 0 10px 50px rgba(234,179,8,0.25);
+}
+.photo-reveal.show {
+  max-height: 600px;
+  opacity: 1;
+  transform: scale(1);
+}
+.photo-reveal img { width: 100%; display: block; }
+
+/* Message */
+#message {
+  margin-top: 30px;
+  font-size: 2.2rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #eab308, #f97316, #ef4444);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.4;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s ease 0.3s;
+}
+#message.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+#message .vn { display: block; font-size: 2.4rem; }
+#message .es { display: block; font-size: 1rem; color: #94a3b8; margin-top: 8px; -webkit-text-fill-color: #94a3b8; }
+
+/* Noodles flying */
+.noodle {
+  position: fixed;
+  font-size: 2rem;
+  z-index: 999;
+  pointer-events: none;
+  opacity: 0;
+  animation: noodleFall 3s ease-in forwards;
+}
+@keyframes noodleFall {
+  0% { opacity: 0; transform: translateY(-20px) rotate(0deg); }
+  15% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(80vh) rotate(360deg); }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>🍜 Quang</h1>
+  <div class="sub">Nhấn để xem điều bí mật 🤫</div>
+
+  <button class="btn-quang" onclick="reveal()">🍜 QUANG!</button>
+
+  <div class="photo-reveal" id="photoReveal">
+    <img src="quang.jpg" alt="Quang">
+  </div>
+
+  <div id="message">
+    <span class="vn">Mì ngon nhất là của mẹ tôi! 🍜</span>
+    <span class="es">Los mejores noodles son los de mi mamá</span>
+  </div>
+</div>
+
+<script>
+function reveal() {
+  document.getElementById('photoReveal').classList.add('show');
+  document.getElementById('message').classList.add('show');
+
+  // Flying noodles
+  const noodles = ['🍜','🍜','🥢','🍜','✨','🍜'];
+  for (let i = 0; i < 12; i++) {
+    setTimeout(() => {
+      const el = document.createElement('div');
+      el.className = 'noodle';
+      el.textContent = noodles[Math.floor(Math.random() * noodles.length)];
+      el.style.left = (5 + Math.random() * 90) + '%';
+      el.style.top = '10%';
+      el.style.fontSize = (1.5 + Math.random() * 2) + 'rem';
+      el.style.animationDuration = (2 + Math.random() * 2) + 's';
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 5000);
+    }, i * 150);
+  }
+}
+</script>
+</body>
+</html>
