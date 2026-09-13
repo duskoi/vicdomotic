@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mandarin Subtitle Studio — Editor</title>
+<script src="https://cdn.jsdelivr.net/npm/pinyin-pro@3/dist/index.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700&display=swap');
+
+:root{
+  --bg:#0b1220;
+  --panel:#0f172a;
+  --panel2:#111c33;
+  --line:#1e2b45;
+  --text:#e6edf7;
+  --muted:#7d8db0;
+  --accent:#38bdf8;
+  --accent2:#a855f7;
+  --green:#22c55e;
+  --amber:#f59e0b;
+  --red:#ef4444;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+}
+.zh{font-family:'Noto Sans SC','Inter',sans-serif}
+
+/* ===== TOP BAR ===== */
+.topbar{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:14px 22px;background:rgba(15,23,42,.95);
+  border-bottom:1px solid var(--line);position:sticky;top:0;z-index:50;
+  backdrop-filter:blur(12px);
+}
+.brand{display:flex;align-items:center;gap:12px}
+.brand .logo{
+  width:38px;height:38px;border-radius:10px;
+  background:linear-gradient(135deg,#ef4444,#f59e0b);
+  display:flex;align-items:center;justify-content:center;font-size:20px;
+}
+.brand h1{font-size:15px;font-weight:700;letter-spacing:-.2px}
+.brand .tag{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap}
+button{font-family:inherit;cursor:pointer;border:none;border-radius:9px;font-weight:600;transition:.15s}
+.btn{padding:9px 16px;font-size:12.5px;background:var(--panel2);color:var(--text);border:1px solid var(--line)}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn.primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none}
+.btn.primary:hover{filter:brightness(1.15);transform:translateY(-1px)}
+.btn.green{background:rgba(34,197,94,.12);border-color:rgba(34,197,94,.4);color:var(--green)}
+.btn.danger{background:rgba(239,68,68,.1);border-color:rgba(239,68,68,.35);color:var(--red)}
+
+/* ===== LAYOUT ===== */
+.layout{display:grid;grid-template-columns:1fr 340px;gap:20px;padding:20px;max-width:1600px;margin:0 auto}
+@media(max-width:1050px){.layout{grid-template-columns:1fr}}
+
+/* ===== CUES ===== */
+.cues{display:flex;flex-direction:column;gap:12px}
+.cue{
+  background:var(--panel);border:1px solid var(--line);border-radius:14px;
+  overflow:hidden;transition:.2s;
+}
+.cue:hover{border-color:#2b3d63}
+.cue.active{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent),0 6px 30px rgba(56,189,248,.15)}
+.cue-head{
+  display:flex;align-items:center;gap:10px;padding:10px 14px;
+  background:var(--panel2);border-bottom:1px solid var(--line);
+}
+.cue-idx{
+  width:26px;height:26px;border-radius:7px;background:#1a2744;
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;color:var(--accent);flex-shrink:0;
+}
+.time-in{width:96px;background:#0a1424;border:1px solid var(--line);color:var(--text);
+  padding:5px 8px;border-radius:7px;font-size:12px;font-family:ui-monospace,monospace}
+.time-in:focus{outline:none;border-color:var(--accent)}
+.dur-hint{font-size:11px;color:var(--muted);margin-left:auto}
+.cue-del{background:transparent;color:var(--muted);font-size:16px;padding:2px 7px}
+.cue-del:hover{color:var(--red)}
+
+.cue-body{padding:14px;display:flex;flex-direction:column;gap:9px}
+.field{display:flex;flex-direction:column;gap:4px}
+.field label{
+  font-size:9.5px;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);
+  font-weight:700;display:flex;align-items:center;gap:6px;
+}
+.field label .dot{width:6px;height:6px;border-radius:50%}
+.dot.zh{background:#ef4444}.dot.py{background:#f59e0b}.dot.tr{background:#a855f7}.dot.en{background:#38bdf8}
+.field input,.field textarea{
+  background:#0a1424;border:1px solid var(--line);color:var(--text);
+  padding:9px 11px;border-radius:9px;font-size:14px;font-family:inherit;width:100%;
+  resize:vertical;
+}
+.field input:focus,.field textarea:focus{outline:none;border-color:var(--accent)}
+.field .zh-input{font-family:'Noto Sans SC',sans-serif;font-size:18px}
+.pinyin-row{display:flex;gap:8px;align-items:center}
+.pinyin-row input{flex:1}
+.regen{
+  background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.35);
+  color:var(--amber);padding:8px 12px;border-radius:9px;font-size:11px;white-space:nowrap;
+}
+.regen:hover{background:rgba(245,158,11,.2)}
+
+/* ===== SIDE PANEL ===== */
+.side{display:flex;flex-direction:column;gap:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px}
+.card h3{font-size:12px;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);margin-bottom:14px;font-weight:700}
+.stat-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:13px}
+.stat-row:last-child{border:none}
+.stat-row span:last-child{font-weight:700;color:var(--accent)}
+.setting{margin-bottom:14px}
+.setting label{font-size:12px;color:var(--muted);display:block;margin-bottom:5px}
+.setting input,.setting select{
+  width:100%;background:#0a1424;border:1px solid var(--line);color:var(--text);
+  padding:9px 11px;border-radius:9px;font-size:13px;font-family:inherit;
+}
+.setting input:focus,.setting select:focus{outline:none;border-color:var(--accent)}
+.export-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.export-grid .btn{text-align:center;padding:11px 8px;font-size:12px}
+
+/* ===== PREVIEW ===== */
+.preview{
+  background:#000;border-radius:12px;padding:22px;text-align:center;
+  border:1px solid var(--line);
+}
+.preview .p-zh{font-family:'Noto Sans SC',sans-serif;font-size:26px;color:#fff;margin-bottom:6px}
+.preview .p-py{font-size:15px;color:var(--amber);margin-bottom:4px}
+.preview .p-tr{font-size:13px;color:#c084fc;margin-bottom:8px;font-style:italic}
+.preview .p-en{font-size:14px;color:var(--accent)}
+
+/* ===== EMPTY ===== */
+.empty{
+  text-align:center;padding:60px 20px;color:var(--muted);
+  background:var(--panel);border:2px dashed var(--line);border-radius:14px;
+}
+.empty .big{font-size:44px;margin-bottom:12px;opacity:.4}
+.empty p{font-size:13px}
+
+/* ===== BULK MODAL ===== */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:100;display:none;align-items:center;justify-content:center;padding:20px}
+.modal.show{display:flex}
+.modal-box{background:var(--panel);border:1px solid var(--line);border-radius:18px;width:min(100%,640px);max-height:85vh;overflow:auto}
+.modal-head{display:flex;justify-content:space-between;align-items:center;padding:18px 22px;border-bottom:1px solid var(--line)}
+.modal-head h2{font-size:16px}
+.modal-body{padding:22px}
+.modal-body p{font-size:13px;color:var(--muted);margin-bottom:12px;line-height:1.6}
+.modal-body textarea{
+  width:100%;min-height:220px;background:#0a1424;border:1px solid var(--line);
+  color:var(--text);padding:14px;border-radius:11px;font-size:14px;font-family:inherit;resize:vertical;
+}
+.modal-body textarea:focus{outline:none;border-color:var(--accent)}
+.modal-foot{padding:18px 22px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:10px}
+.close-x{background:transparent;color:var(--muted);font-size:22px;padding:0 8px}
+.close-x:hover{color:var(--text)}
+
+/* toast */
+.toast{
+  position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);
+  background:var(--green);color:#04140a;padding:13px 26px;border-radius:11px;
+  font-weight:700;font-size:13px;z-index:200;transition:.35s;opacity:0;
+}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">
+    <div class="logo">中</div>
+    <div>
+      <h1>Mandarin Subtitle Studio</h1>
+      <div class="tag">Pinyin · Translit · English</div>
+    </div>
+  </div>
+  <div class="toolbar">
+    <button class="btn" onclick="openBulk()">📥 Bulk Import</button>
+    <button class="btn primary" onclick="addCue()">+ New Cue</button>
+  </div>
+</div>
+
+<div class="layout">
+  <!-- LEFT: cues -->
+  <div>
+    <div class="cues" id="cues"></div>
+  </div>
+
+  <!-- RIGHT: panel -->
+  <div class="side">
+    <div class="card">
+      <h3>Live Preview</h3>
+      <div class="preview">
+        <div class="p-zh" id="pZh">你好</div>
+        <div class="p-py" id="pPy">nǐ hǎo</div>
+        <div class="p-tr" id="pTr">nee how</div>
+        <div class="p-en" id="pEn">Hello</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Statistics</h3>
+      <div class="stat-row"><span>Cues</span><span id="sCues">0</span></div>
+      <div class="stat-row"><span>Total duration</span><span id="sDur">0:00</span></div>
+      <div class="stat-row"><span>Characters</span><span id="sChars">0</span></div>
+      <div class="stat-row"><span>Est. video length</span><span id="sVid">0:00</span></div>
+    </div>
+
+    <div class="card">
+      <h3>Format Options</h3>
+      <div class="setting">
+        <label>Tone display</label>
+        <select id="toneMode">
+          <option value="marks">Tone marks (nǐ hǎo)</option>
+          <option value="numbers">Numbers (ni3 hao3)</option>
+          <option value="none">No tones (ni hao)</option>
+        </select>
+      </div>
+      <div class="setting">
+        <label>Default cue duration (sec)</label>
+        <input type="number" id="defDur" value="3" min="0.5" step="0.5">
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Export</h3>
+      <div class="export-grid">
+        <button class="btn green" onclick="exportFile('srt')">SRT</button>
+        <button class="btn green" onclick="exportFile('vtt')">VTT</button>
+        <button class="btn" onclick="exportFile('txt')">Plain Text</button>
+        <button class="btn" onclick="exportFile('json')">JSON</button>
+        <button class="btn" onclick="exportFile('csv')">CSV</button>
+        <button class="btn" onclick="copyAll()">📋 Copy</button>
+      </div>
+      <button class="btn danger" style="width:100%;margin-top:10px" onclick="clearAll()">🗑 Clear All</button>
+    </div>
+  </div>
+</div>
+
+<!-- Bulk import modal -->
+<div class="modal" id="bulkModal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h2>📥 Bulk Import</h2>
+      <button class="close-x" onclick="closeBulk()">×</button>
+    </div>
+    <div class="modal-body">
+      <p>Paste your Chinese script — <b>one line per subtitle</b>. Pinyin will be generated automatically. You can then fill in transliteration + English.</p>
+      <textarea id="bulkText" class="zh" placeholder="你好，我叫李华。&#10;很高兴认识你。&#10;你是哪国人？"></textarea>
+    </div>
+    <div class="modal-foot">
+      <button class="btn" onclick="closeBulk()">Cancel</button>
+      <button class="btn primary" onclick="doBulkImport()">Import & Generate Pinyin</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+let cues = [];
+let activeIdx = null;
+let pinyinReady = typeof pinyinPro !== 'undefined';
+
+/* ---------- PINYIN ---------- */
+function toPinyin(text, mode){
+  if(!text) return '';
+  if(!pinyinReady) return '';
+  try{
+    if(mode === 'numbers'){
+      return pinyinPro.pinyin(text, {toneType:'num', type:'string', separator:' '});
+    } else if(mode === 'none'){
+      return pinyinPro.pinyin(text, {toneType:'none', type:'string', separator:' '});
+    } else {
+      return pinyinPro.pinyin(text, {toneType:'symbol', type:'string', separator:' '});
+    }
+  }catch(e){ return ''; }
+}
+
+/* ---------- RENDER ---------- */
+function render(){
+  const wrap = document.getElementById('cues');
+  if(cues.length === 0){
+    wrap.innerHTML = `<div class="empty">
+      <div class="big">中</div>
+      <p>No cues yet. Click <b>+ New Cue</b> or <b>📥 Bulk Import</b> to start.<br>
+      Pinyin is generated automatically from the Chinese text.</p>
+    </div>`;
+  } else {
+    wrap.innerHTML = cues.map((c,i)=>`
+      <div class="cue ${activeIdx===i?'active':''}" data-i="${i}">
+        <div class="cue-head">
+          <div class="cue-idx">${i+1}</div>
+          <input class="time-in" value="${c.time}" onchange="upd(${i},'time',this.value)" placeholder="00:00:00">
+          <span class="dur-hint">${c.dur.toFixed(1)}s</span>
+          <button class="cue-del" onclick="delCue(${i})" title="Delete">✕</button>
+        </div>
+        <div class="cue-body">
+          <div class="field">
+            <label><span class="dot zh"></span>Chinese 汉字</label>
+            <textarea class="zh-input" rows="1" oninput="upd(${i},'zh',this.value);autoPy(${i})" onfocus="activeIdx=${i};render()">${esc(c.zh)}</textarea>
+          </div>
+          <div class="field">
+            <label><span class="dot py"></span>Pinyin (auto)</label>
+            <div class="pinyin-row">
+              <input value="${esc(c.py)}" oninput="upd(${i},'py',this.value)" onfocus="activeIdx=${i}">
+              <button class="regen" onclick="regenPy(${i})">↻ Gen</button>
+            </div>
+          </div>
+          <div class="field">
+            <label><span class="dot tr"></span>English transliteration</label>
+            <input value="${esc(c.tr)}" oninput="upd(${i},'tr',this.value)" onfocus="activeIdx=${i}" placeholder="e.g. nee how">
+          </div>
+          <div class="field">
+            <label><span class="dot en"></span>English translation</label>
+            <input value="${esc(c.en)}" oninput="upd(${i},'en',this.value)" onfocus="activeIdx=${i}" placeholder="e.g. Hello">
+          </div>
+        </div>
+      </div>`).join('');
+  }
+  updateStats();
+}
+
+function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+/* ---------- ACTIONS ---------- */
+function addCue(){
+  const dur = parseFloat(document.getElementById('defDur').value) || 3;
+  const lastTime = cues.length ? addSeconds(cues[cues.length-1].time, cues[cues.length-1].dur) : '00:00:00';
+  cues.push({ time: lastTime, dur, zh:'', py:'', tr:'', en:'' });
+  activeIdx = cues.length - 1;
+  render();
+  setTimeout(()=>{ const ta = document.querySelector(`.cue[data-i="${cues.length-1}"] .zh-input`); if(ta) ta.focus(); }, 50);
+}
+
+function delCue(i){
+  cues.splice(i,1);
+  if(activeIdx >= cues.length) activeIdx = cues.length-1;
+  render();
+}
+
+function upd(i, field, val){
+  if(!cues[i]) return;
+  cues[i][field] = val;
+  if(field === 'zh'){ autoPy(i, true); }
+  updateStats();
+  updatePreview(i);
+}
+
+function autoPy(i, force){
+  if(!cues[i]) return;
+  const mode = document.getElementById('toneMode').value;
+  if(force || !cues[i].py){
+    cues[i].py = toPinyin(cues[i].zh, mode);
+    const inp = document.querySelector(`.cue[data-i="${i}"] .pinyin-row input`);
+    if(inp) inp.value = cues[i].py;
+  }
+  updatePreview(i);
+}
+
+function regenPy(i){
+  const mode = document.getElementById('toneMode').value;
+  cues[i].py = toPinyin(cues[i].zh, mode);
+  const inp = document.querySelector(`.cue[data-i="${i}"] .pinyin-row input`);
+  if(inp) inp.value = cues[i].py;
+  updatePreview(i);
+  updateStats();
+}
+
+function updatePreview(i){
+  if(i === undefined) i = activeIdx;
+  const c = cues[i] || cues[0];
+  if(!c) return;
+  document.getElementById('pZh').textContent = c.zh || '你好';
+  document.getElementById('pPy').textContent = c.py || 'nǐ hǎo';
+  document.getElementById('pTr').textContent = c.tr || 'nee how';
+  document.getElementById('pEn').textContent = c.en || 'Hello';
+}
+
+/* ---------- BULK ---------- */
+function openBulk(){ document.getElementById('bulkModal').classList.add('show'); }
+function closeBulk(){ document.getElementById('bulkModal').classList.remove('show'); }
+
+function doBulkImport(){
+  const txt = document.getElementById('bulkText').value.trim();
+  if(!txt){ closeBulk(); return; }
+  const lines = txt.split('\n').map(l=>l.trim()).filter(l=>l.length);
+  const mode = document.getElementById('toneMode').value;
+  const defDur = parseFloat(document.getElementById('defDur').value) || 3;
+  let t = cues.length ? addSeconds(cues[cues.length-1].time, cues[cues.length-1].dur) : '00:00:00';
+  lines.forEach(line=>{
+    cues.push({
+      time: t,
+      dur: defDur,
+      zh: line,
+      py: toPinyin(line, mode),
+      tr: '',
+      en: ''
+    });
+    t = addSeconds(t, defDur);
+  });
+  closeBulk();
+  document.getElementById('bulkText').value = '';
+  activeIdx = cues.length - 1;
+  render();
+  toast('Imported ' + lines.length + ' cues with pinyin ✓');
+}
+
+/* ---------- TIME ---------- */
+function addSeconds(ts, sec){
+  const parts = (ts||'00:00:00').split(':').map(Number);
+  let total = (parts[0]||0)*3600 + (parts[1]||0)*60 + (parts[2]||0) + sec;
+  const h = Math.floor(total/3600), m = Math.floor((total%3600)/60), s = total%60;
+  return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(Math.floor(s)).padStart(2,'0')}`;
+}
+function toSrtTime(ts){ return (ts||'00:00:00').replace('.','.')+',000'; }
+function secToTime(total){
+  const h=Math.floor(total/3600),m=Math.floor((total%3600)/60),s=Math.floor(total%60);
+  return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+}
+
+/* ---------- STATS ---------- */
+function updateStats(){
+  document.getElementById('sCues').textContent = cues.length;
+  let total = 0, chars = 0;
+  cues.forEach(c=>{ total += c.dur||0; chars += (c.zh||'').length; });
+  document.getElementById('sDur').textContent = secToTime(total);
+  document.getElementById('sChars').textContent = chars;
+  document.getElementById('sVid').textContent = secToTime(total + (cues.length?1:0) + total*0.1);
+}
+
+/* ---------- EXPORT ---------- */
+function buildText(format){
+  const lineOf = c => {
+    const parts = [];
+    if(c.zh) parts.push(c.zh);
+    if(c.py) parts.push(c.py);
+    if(c.tr) parts.push('[' + c.tr + ']');
+    if(c.en) parts.push(c.en);
+    return parts.join('\n');
+  };
+  if(format === 'txt') return cues.map(lineOf).join('\n\n');
+  if(format === 'csv'){
+    const head = 'time,chinese,pinyin,transliteration,english';
+    const rows = cues.map(c=>[c.time,c.zh,c.py,c.tr,c.en].map(v=>`"${(v||'').replace(/"/g,'""')}"`).join(','));
+    return [head,...rows].join('\n');
+  }
+  if(format === 'json') return JSON.stringify(cues, null, 2);
+  // SRT / VTT
+  const isVtt = format === 'vtt';
+  let out = isVtt ? 'WEBVTT\n\n' : '';
+  cues.forEach((c,i)=>{
+    const start = isVtt ? (c.time+'.000').replace(',','.') : toSrtTime(c.time);
+    const end = isVtt ? (addSeconds(c.time, c.dur)+'.000') : toSrtTime(addSeconds(c.time, c.dur));
+    out += `${i+1}\n${start} --> ${end}\n${lineOf(c)}\n\n`;
+  });
+  return out;
+}
+
+function exportFile(format){
+  if(cues.length === 0){ toast('No cues to export'); return; }
+  const content = buildText(format);
+  const names = { srt:'srt', vtt:'vtt', txt:'txt', json:'json', csv:'csv' };
+  const types = { srt:'text/plain', vtt:'text/vtt', txt:'text/plain', json:'application/json', csv:'text/csv' };
+  const blob = new Blob([content], {type:types[format]+';charset=utf-8'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'mandarin-subtitles.' + names[format];
+  a.click();
+  URL.revokeObjectURL(a.href);
+  toast('Exported .' + names[format] + ' ✓');
+}
+
+function copyAll(){
+  if(cues.length === 0){ toast('Nothing to copy'); return; }
+  navigator.clipboard.writeText(buildText('txt')).then(()=>toast('Copied ✓'));
+}
+
+function clearAll(){
+  if(cues.length && !confirm('Delete all cues?')) return;
+  cues = []; activeIdx = null; render(); toast('Cleared');
+}
+
+/* ---------- TOAST ---------- */
+function toast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2200);
+}
+
+/* ---------- INIT ---------- */
+document.getElementById('toneMode').addEventListener('change', ()=>{
+  const mode = document.getElementById('toneMode').value;
+  cues.forEach((c,i)=>{ if(c.zh){ c.py = toPinyin(c.zh, mode); } });
+  render();
+});
+
+// Demo cue on first load
+if(cues.length === 0){
+  cues = [
+    { time:'00:00:00', dur:3, zh:'你好！欢迎来到中文课。', py:'', tr:'nee how! hwan ying lai daw jong wen kuh', en:'Hello! Welcome to Chinese class.' },
+    { time:'00:00:03', dur:3, zh:'今天我们学习拼音。', py:'', tr:'jin tyan women shweh shee peen yin', en:'Today we learn pinyin.' }
+  ];
+  const mode = document.getElementById('toneMode').value;
+  cues.forEach(c=>c.py = toPinyin(c.zh, mode));
+}
+
+// wait for pinyin lib if needed
+if(!pinyinReady){
+  window.addEventListener('load', ()=>{
+    pinyinReady = typeof pinyinPro !== 'undefined';
+    if(pinyinReady) cues.forEach(c=>{ if(c.zh && !c.py) c.py = toPinyin(c.zh); });
+    render();
+  });
+}
+
+render();
+activeIdx = 0;
+updatePreview(0);
+</script>
+</body>
+</html>
