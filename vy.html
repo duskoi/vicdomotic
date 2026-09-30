@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>💜 I Miss You — Vy</title>
+
+<!-- Open Graph (WhatsApp / Facebook / Twitter preview) -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="💜 I Miss You — Vy">
+<meta property="og:description" content="A message for Vy 💌">
+<meta property="og:image" content="http://164.132.96.242:8080/vy.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="http://164.132.96.242:8080/vy.html">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;600;800&display=swap');
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: linear-gradient(160deg, #0a0f1e 0%, #1e1033 50%, #301040 100%);
+  color: #e2e8f0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.container { text-align: center; padding: 30px; max-width: 480px; }
+
+h1 {
+  font-size: 4rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #ec4899, #a855f7, #38bdf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 8px;
+  animation: glow 3s ease-in-out infinite;
+}
+@keyframes glow {
+  0%,100% { filter: drop-shadow(0 0 10px rgba(236,72,153,0.3)); }
+  50% { filter: drop-shadow(0 0 25px rgba(236,72,153,0.6)); }
+}
+.sub { color: #94a3b8; font-size: 1rem; margin-bottom: 35px; }
+
+/* Clickable icon */
+.icon-btn {
+  font-size: 7rem;
+  line-height: 1;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: inline-block;
+  transition: transform 0.2s ease;
+  filter: drop-shadow(0 0 20px rgba(236,72,153,0.5));
+  animation: float 2.5s ease-in-out infinite;
+}
+@keyframes float {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+.icon-btn:hover { transform: scale(1.15); }
+.icon-btn:active { transform: scale(0.9); }
+
+/* Message */
+#message {
+  margin-top: 30px;
+  font-size: 3.5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #ec4899, #a855f7, #38bdf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  opacity: 0;
+  transform: scale(0.3);
+  transition: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+#message.show {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Photo reveal */
+.photo-reveal {
+  margin: 25px auto 0;
+  max-width: 320px;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 3px solid #ec4899;
+  box-shadow: 0 10px 50px rgba(236,72,153,0.3);
+  max-height: 0;
+  opacity: 0;
+  transform: scale(0.7);
+  transition: all 0.9s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+.photo-reveal.show {
+  max-height: 500px;
+  opacity: 1;
+  transform: scale(1);
+}
+.photo-reveal img { width: 100%; display: block; }
+
+/* Floating hearts */
+.heart-float {
+  position: fixed;
+  font-size: 2.2rem;
+  z-index: 999;
+  pointer-events: none;
+  opacity: 0;
+  animation: heartUp 3s ease-out forwards;
+}
+@keyframes heartUp {
+  0% { opacity: 0; transform: translateY(0) scale(0) rotate(0deg); }
+  20% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-350px) scale(1.4) rotate(25deg); }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Vy 💜</h1>
+  <div class="sub">Press the icon 👇</div>
+
+  <button class="icon-btn" onclick="miss()">💌</button>
+
+  <div id="message">I Miss You 💜</div>
+
+  <div class="photo-reveal" id="photoReveal">
+    <img src="vy.jpg" alt="Vy">
+  </div>
+</div>
+
+<script>
+function miss() {
+  const msg = document.getElementById('message');
+  msg.style.display = 'block';
+  msg.classList.remove('show');
+  void msg.offsetWidth;
+  msg.classList.add('show');
+
+  document.getElementById('photoReveal').classList.add('show');
+
+  // Floating hearts
+  const hearts = ['💜','💖','💕','💗','💝','❤️'];
+  for (let i = 0; i < 14; i++) {
+    setTimeout(() => {
+      const el = document.createElement('div');
+      el.className = 'heart-float';
+      el.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+      el.style.left = (5 + Math.random() * 90) + '%';
+      el.style.top = (50 + Math.random() * 35) + '%';
+      el.style.fontSize = (1.5 + Math.random() * 2.5) + 'rem';
+      el.style.animationDuration = (2 + Math.random() * 2) + 's';
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 4500);
+    }, i * 130);
+  }
+}
+</script>
+</body>
+</html>
