@@ -9,10 +9,10 @@
 <meta property="og:type" content="website">
 <meta property="og:title" content="💜 I Miss You — Vy">
 <meta property="og:description" content="A message for Vy 💌">
-<meta property="og:image" content="http://164.132.96.242:8080/vy.jpg">
+<meta property="og:image" content="https://duskoi.github.io/vicdomotic/vy.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:url" content="http://164.132.96.242:8080/vy.html">
+<meta property="og:url" content="https://duskoi.github.io/vicdomotic/vy.html">
 <meta name="twitter:card" content="summary_large_image">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;600;800&display=swap');
@@ -25,7 +25,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
+  overflow-y: auto;
 }
 .container { text-align: center; padding: 30px; max-width: 480px; }
 
@@ -102,6 +102,94 @@ h1 {
 }
 .photo-reveal img { width: 100%; display: block; }
 
+/* Song section */
+.song-btn {
+  margin-top: 25px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #a855f7, #ec4899);
+  color: white;
+  border: none;
+  padding: 12px 26px;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  box-shadow: 0 6px 24px rgba(168,85,247,0.3);
+  transition: all 0.3s ease;
+}
+.song-btn:hover { transform: scale(1.05); }
+.song-btn:active { transform: scale(0.95); }
+
+.song-lyrics {
+  margin: 25px auto 0;
+  max-width: 440px;
+  text-align: left;
+  background: rgba(15,23,42,0.7);
+  border: 1px solid rgba(168,85,247,0.25);
+  border-radius: 20px;
+  padding: 24px;
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transform: scale(0.9);
+  transition: all 0.7s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+.song-lyrics.show {
+  max-height: 2000px;
+  opacity: 1;
+  transform: scale(1);
+  overflow-y: auto;
+}
+.song-lyrics .lyric-title {
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: 800;
+  margin-bottom: 4px;
+  background: linear-gradient(135deg, #ec4899, #a855f7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.song-lyrics .lyric-sub {
+  text-align: center;
+  font-size: 0.7rem;
+  color: #64748b;
+  margin-bottom: 18px;
+}
+.song-lyrics .section-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #a855f7;
+  font-weight: 800;
+  margin: 16px 0 8px;
+  text-align: center;
+}
+.song-lyrics p {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: #cbd5e1;
+  text-align: center;
+  margin: 2px 0;
+}
+.song-lyrics .melisma {
+  color: #a855f7;
+  font-style: italic;
+  letter-spacing: 1px;
+}
+.song-lyrics .lyric-note {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  font-size: 0.75rem;
+  color: #64748b;
+  line-height: 1.6;
+  text-align: left;
+}
+
 /* Floating hearts */
 .heart-float {
   position: fixed;
@@ -130,9 +218,60 @@ h1 {
   <div class="photo-reveal" id="photoReveal">
     <img src="vy.jpg" alt="Vy">
   </div>
+
+  <button class="song-btn" onclick="toggleSong()">🎵 Thật Đáng Để Gặp Em</button>
+
+  <div class="song-lyrics" id="songLyrics">
+    <div class="lyric-title">THẬT ĐÁNG ĐỂ GẶP EM</div>
+    <div class="lyric-sub">Hát theo nhạc "Tay Trái Chỉ Trăng" 左手指月</div>
+
+    <div class="section-label">— KHỔ 1 —</div>
+    <p>Đừng buồn nhé Vy anh phải rời xa em</p>
+    <p>có những phút giây ngắn ngủi chẳng quên</p>
+    <p>nhưng trong lòng anh mãi mãi không phai</p>
+    <p>thời gian ơi, xin đừng trôi</p>
+
+    <div class="section-label">— KHỔ 2 —</div>
+    <p>Anh đã chờ bao ngày ở Phú Quốc xa</p>
+    <p>chỉ để hiểu em thêm một chút thôi</p>
+    <p class="melisma">chờ mãi… ơi à a a 🎶</p>
+    <p class="melisma">chờ mãi… ơi à a a 🎶</p>
+
+    <div class="section-label">— KHỔ 3 —</div>
+    <p>Anh đã đến tận Rạch Giá tìm em</p>
+    <p>vì không muốn nói lời tạm biệt nhau</p>
+    <p>khi chưa kịp giữ lấy một kỷ niệm</p>
+    <p>về nụ cười và giọng nói của em</p>
+
+    <div class="section-label">— ĐIỆP KHÚC —</div>
+    <p>Đừng buồn nhé, anh sẽ quay trở lại</p>
+    <p>anh rất mong được gặp lại em thôi</p>
+    <p>Được biết em là điều thật đẹp đẽ</p>
+    <p>chuyến đi này không thể nào kết thúc</p>
+    <p>chỉ vì anh phải trở về nơi ấy</p>
+    <p>…</p>
+    <p>Đừng buồn nhé, hãy luôn nhớ đến anh</p>
+    <p>anh cũng sẽ luôn nhớ đến em hoài</p>
+    <p>vì tất cả những ngày anh chờ đợi</p>
+    <p>cuối cùng đều thật ý nghĩa với anh</p>
+    <p>từng khoảnh khắc sẽ không thể nào quên</p>
+
+    <div class="section-label">— ĐOẠN KẾT —</div>
+    <p>Giờ đã đến lúc anh phải đi xa</p>
+    <p>trở về với cuộc sống của riêng mình</p>
+    <p>anh sẽ mang theo những phút giây đẹp</p>
+    <p>bên nhau ở Rạch Giá ngày hôm ấy</p>
+
+    <div class="lyric-note">🎶 "ơi à a a" = chỗ hát "啊啊啊" (melisma)<br>• Số âm tiết khớp với giai điệu gốc</div>
+  </div>
 </div>
 
 <script>
+function toggleSong() {
+  const ly = document.getElementById('songLyrics');
+  ly.classList.toggle('show');
+}
+
 function miss() {
   const msg = document.getElementById('message');
   msg.style.display = 'block';
