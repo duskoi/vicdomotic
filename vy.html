@@ -190,6 +190,19 @@ h1 {
   text-align: left;
 }
 
+.music-player {
+  margin: 16px 0;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.4);
+}
+.music-player iframe {
+  width: 100%;
+  aspect-ratio: 16/9;
+  border: 0;
+  display: block;
+}
+
 /* Floating hearts */
 .heart-float {
   position: fixed;
@@ -224,6 +237,11 @@ h1 {
   <div class="song-lyrics" id="songLyrics">
     <div class="lyric-title">THẬT ĐÁNG ĐỂ GẶP EM</div>
     <div class="lyric-sub">Hát theo nhạc "Tay Trái Chỉ Trăng" 左手指月</div>
+
+    <!-- Music player -->
+    <div class="music-player">
+      <iframe src="https://www.youtube.com/embed/ATPulcGQ2SE" title="Tay Trái Chỉ Trăng" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
 
     <div class="section-label">— KHỔ 1 —</div>
     <p>Đừng buồn nhé Vy anh phải rời xa em</p>
