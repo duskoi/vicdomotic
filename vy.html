@@ -238,10 +238,8 @@ h1 {
     <div class="lyric-title">THẬT ĐÁNG ĐỂ GẶP EM</div>
     <div class="lyric-sub">Hát theo nhạc "Tay Trái Chỉ Trăng" 左手指月</div>
 
-    <!-- Music player -->
-    <div class="music-player">
-      <iframe src="https://www.youtube.com/embed/ATPulcGQ2SE" title="Tay Trái Chỉ Trăng" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-    </div>
+    <!-- Music player (se carga con autoplay al pulsar el boton) -->
+    <div class="music-player" id="musicPlayer"></div>
 
     <div class="section-label">— KHỔ 1 —</div>
     <p>Đừng buồn nhé Vy anh phải rời xa em</p>
@@ -287,7 +285,18 @@ h1 {
 <script>
 function toggleSong() {
   const ly = document.getElementById('songLyrics');
-  ly.classList.toggle('show');
+  const showing = ly.classList.toggle('show');
+
+  // Cargar el reproductor con autoplay al abrir la primera vez
+  if (showing && !document.getElementById('ytPlayer')) {
+    const player = document.createElement('iframe');
+    player.id = 'ytPlayer';
+    player.src = 'https://www.youtube.com/embed/ATPulcGQ2SE?autoplay=1&rel=0';
+    player.title = 'Tay Trái Chỉ Trăng';
+    player.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+    player.allowFullscreen = true;
+    document.getElementById('musicPlayer').appendChild(player);
+  }
 }
 
 function miss() {
