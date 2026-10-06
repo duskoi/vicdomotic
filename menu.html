@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎪 Mi Web — Menú</title>
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="🎪 Mis Webs">
+<meta property="og:description" content="Todas mis páginas en un solo sitio">
+<meta property="og:url" content="https://duskoi.github.io/vicdomotic/menu.html">
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: linear-gradient(160deg, #0a0f1e 0%, #161a33 50%, #1e1240 100%);
+  color: #e2e8f0;
+  min-height: 100vh;
+  padding: 30px 20px;
+}
+.wrap { max-width: 620px; margin: 0 auto; }
+
+h1 {
+  text-align: center;
+  font-size: 2.6rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #38bdf8, #a855f7, #ec4899);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 6px;
+}
+.sub { text-align: center; color: #94a3b8; font-size: 0.9rem; margin-bottom: 30px; }
+
+.section-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #64748b;
+  font-weight: 800;
+  margin: 24px 0 12px;
+  text-align: center;
+}
+
+/* ===== MENU GRID ===== */
+.menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media(max-width:440px){ .menu-grid { grid-template-columns: 1fr; } }
+.menu-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 18px 12px;
+  border-radius: 16px;
+  background: rgba(15,23,42,0.7);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: #e2e8f0;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+}
+.menu-btn .icon { font-size: 2rem; }
+.menu-btn:hover { transform: translateY(-3px); border-color: #a855f7; box-shadow: 0 8px 24px rgba(168,85,247,0.2); }
+.menu-btn:active { transform: scale(0.96); }
+
+/* ===== FUN BUTTONS ===== */
+.fun-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media(max-width:440px){ .fun-grid { grid-template-columns: 1fr; } }
+.fun-btn {
+  padding: 16px 12px;
+  border-radius: 16px;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: 800;
+  font-size: 1.05rem;
+  color: #fff;
+  transition: all 0.2s ease;
+}
+.fun-btn:hover { transform: translateY(-3px); }
+.fun-btn:active { transform: scale(0.95); }
+.fb-hearts { background: linear-gradient(135deg, #ec4899, #f43f5e); }
+.fb-confetti { background: linear-gradient(135deg, #f59e0b, #ef4444); }
+.fb-emoji { background: linear-gradient(135deg, #22c55e, #84cc16); }
+.fb-stars { background: linear-gradient(135deg, #38bdf8, #a855f7); }
+
+/* ===== MESSAGE OUTPUT ===== */
+#output {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 2.2rem;
+  font-weight: 800;
+  min-height: 60px;
+  background: linear-gradient(135deg, #38bdf8, #a855f7, #ec4899);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  opacity: 0;
+  transform: scale(0.5);
+  transition: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+#output.show { opacity: 1; transform: scale(1); }
+
+/* Floating elements */
+.floater {
+  position: fixed;
+  z-index: 999;
+  pointer-events: none;
+  opacity: 0;
+  animation: floatUp 3s ease-out forwards;
+}
+@keyframes floatUp {
+  0% { opacity: 0; transform: translateY(0) scale(0) rotate(0deg); }
+  20% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-350px) scale(1.4) rotate(25deg); }
+}
+.confetti-piece {
+  position: fixed;
+  width: 10px; height: 10px;
+  top: -10px;
+  z-index: 999;
+  animation: confettiFall linear forwards;
+}
+@keyframes confettiFall {
+  0% { transform: translateY(0) rotate(0); opacity: 1; }
+  100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>🎪 Mis Webs</h1>
+  <div class="sub">Todas mis páginas + un poco de diversión</div>
+
+  <div class="section-label">— Mis páginas —</div>
+  <div class="menu-grid">
+    <a class="menu-btn" href="vy.html"><span class="icon">💜</span>Vy</a>
+    <a class="menu-btn" href="quang.html"><span class="icon">🍜</span>Quang</a>
+    <a class="menu-btn" href="ona.html"><span class="icon">💃</span>Ona</a>
+    <a class="menu-btn" href="camilo.html"><span class="icon">💛</span>Camilo</a>
+    <a class="menu-btn" href="kim.html"><span class="icon">🍣</span>Kim</a>
+    <a class="menu-btn" href="nhatrang.html"><span class="icon">💖</span>Nha Trang</a>
+    <a class="menu-btn" href="anni.html"><span class="icon">🌸</span>Anni</a>
+    <a class="menu-btn" href="toan9.html"><span class="icon">📐</span>Thi Toán 9</a>
+    <a class="menu-btn" href="mandarin-studio.html"><span class="icon">中</span>Mandarin Studio</a>
+    <a class="menu-btn" href="index.html"><span class="icon">🤖</span>VicDomotic</a>
+  </div>
+
+  <div class="section-label">— Botones divertidos —</div>
+  <div class="fun-grid">
+    <button class="fun-btn fb-hearts" onclick="fun('💖 Te quiero!')">💖 Corazones</button>
+    <button class="fun-btn fb-confetti" onclick="fun('🎉 Fiesta!')">🎉 Confeti</button>
+    <button class="fun-btn fb-emoji" onclick="fun('😄 Sonríe!')">😄 Emojis</button>
+    <button class="fun-btn fb-stars" onclick="fun('⭐ Eres genial!')">⭐ Estrellas</button>
+  </div>
+
+  <div id="output"></div>
+</div>
+
+<script>
+function fun(msg) {
+  const out = document.getElementById('output');
+  out.textContent = msg;
+  out.classList.remove('show');
+  void out.offsetWidth;
+  out.classList.add('show');
+
+  // Elegir tipo de elemento flotante según el botón
+  let pool = [];
+  if (msg.includes('Te quiero')) pool = ['💖','💗','💕','❤️','💘'];
+  else if (msg.includes('Fiesta')) pool = ['🎉','🎊','🥳','🎈','✨'];
+  else if (msg.includes('Sonríe')) pool = ['😄','😊','😃','🤗','😁'];
+  else pool = ['⭐','🌟','✨','💫','🌟'];
+
+  if (msg.includes('Fiesta')) {
+    // Confetti
+    const colors = ['#f97316','#ec4899','#eab308','#22c55e','#38bdf8','#a78bfa'];
+    for (let i = 0; i < 40; i++) {
+      const el = document.createElement('div');
+      el.className = 'confetti-piece';
+      el.style.left = Math.random() * 100 + '%';
+      el.style.background = colors[Math.floor(Math.random()*colors.length)];
+      el.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+      el.style.width = (5 + Math.random()*10) + 'px';
+      el.style.height = (5 + Math.random()*10) + 'px';
+      el.style.animationDuration = (2 + Math.random()*2) + 's';
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 4000);
+    }
+  } else {
+    // Elementos flotantes
+    for (let i = 0; i < 18; i++) {
+      setTimeout(() => {
+        const el = document.createElement('div');
+        el.className = 'floater';
+        el.textContent = pool[Math.floor(Math.random()*pool.length)];
+        el.style.left = (3 + Math.random()*94) + '%';
+        el.style.top = (40 + Math.random()*45) + '%';
+        el.style.fontSize = (1.5 + Math.random()*2.5) + 'rem';
+        el.style.animationDuration = (2 + Math.random()*2) + 's';
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 4500);
+      }, i * 110);
+    }
+  }
+}
+</script>
+</body>
+</html>
