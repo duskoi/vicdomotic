@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🧑‍🦲 El Encuentro de los Tres Calvos</title>
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="🧑‍🦲 El Encuentro de los Tres Calvos">
+<meta property="og:description" content="Los tres calvos reunidos 🧑‍🦲🧑‍🦲🧑‍🦲">
+<meta property="og:image" content="https://duskoi.github.io/vicdomotic/tres-calvos.jpg">
+<meta property="og:url" content="https://duskoi.github.io/vicdomotic/tres-calvos.html">
+<meta name="twitter:card" content="summary_large_image">
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;600;800&display=swap');
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: linear-gradient(160deg, #0a0f1e 0%, #1a1a1a 50%, #222 100%);
+  color: #e2e8f0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow-y: auto;
+}
+.container { text-align: center; padding: 20px; max-width: 480px; }
+
+h1 {
+  font-size: 2.4rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #fbbf24, #f97316, #a855f7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 6px;
+  animation: glow 3s ease-in-out infinite;
+}
+@keyframes glow {
+  0%,100% { filter: drop-shadow(0 0 10px rgba(251,191,36,0.3)); }
+  50% { filter: drop-shadow(0 0 25px rgba(251,191,36,0.6)); }
+}
+.sub { color: #94a3b8; font-size: 0.9rem; margin-bottom: 20px; }
+
+/* Button */
+.btn-calvos {
+  background: linear-gradient(135deg, #fbbf24, #f97316);
+  color: #1a1a1a;
+  border: none;
+  padding: 16px 42px;
+  border-radius: 60px;
+  font-size: 1.4rem;
+  font-weight: 800;
+  cursor: pointer;
+  font-family: inherit;
+  letter-spacing: 0.5px;
+  box-shadow: 0 8px 32px rgba(251,191,36,0.4);
+  transition: all 0.3s ease;
+}
+.btn-calvos:hover { transform: scale(1.06); box-shadow: 0 12px 48px rgba(251,191,36,0.6); }
+.btn-calvos:active { transform: scale(0.95); }
+
+/* Photo reveal */
+.photo-reveal {
+  margin: 20px auto 0;
+  max-width: 260px;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 3px solid #fbbf24;
+  box-shadow: 0 10px 50px rgba(251,191,36,0.35);
+  max-height: 0;
+  opacity: 0;
+  transform: scale(0.7);
+  transition: all 0.9s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+.photo-reveal.show {
+  max-height: 600px;
+  opacity: 1;
+  transform: scale(1);
+}
+.photo-reveal img { width: 100%; display: block; }
+
+/* Message */
+#message {
+  margin-top: 16px;
+  font-size: 1.5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #fbbf24, #f97316);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.7s ease 0.3s;
+}
+#message.show { opacity: 1; transform: translateY(0); }
+
+/* Sparkle/shine for bald heads */
+.sparkle {
+  position: fixed;
+  font-size: 2rem;
+  z-index: 999;
+  pointer-events: none;
+  opacity: 0;
+  animation: sparkleUp 3s ease-out forwards;
+}
+@keyframes sparkleUp {
+  0% { opacity: 0; transform: translateY(0) scale(0) rotate(0deg); }
+  20% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-350px) scale(1.4) rotate(25deg); }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>🧑‍🦲 El Encuentro de los Tres Calvos</h1>
+  <div class="sub">Hay que pulsar el botón para ver a los tres 👇</div>
+
+  <button class="btn-calvos" onclick="revelar()">✨ ¡REVELAR A LOS CALVOS! ✨</button>
+
+  <div class="photo-reveal" id="photoReveal">
+    <img src="tres-calvos.jpg" alt="Los tres calvos">
+  </div>
+
+  <div id="message">🧑‍🦲 ¡Los Tres Calvos! 🧑‍🦲</div>
+</div>
+
+<script>
+function revelar() {
+  document.getElementById('photoReveal').classList.add('show');
+  const msg = document.getElementById('message');
+  msg.classList.add('show');
+
+  // Destellos brillantes (para los calvos 😄)
+  const icons = ['✨','⭐','💫','✨','🌟','✨','💛','⭐'];
+  for (let i = 0; i < 24; i++) {
+    setTimeout(() => {
+      const el = document.createElement('div');
+      el.className = 'sparkle';
+      el.textContent = icons[Math.floor(Math.random() * icons.length)];
+      el.style.left = (3 + Math.random() * 94) + '%';
+      el.style.top = (40 + Math.random() * 45) + '%';
+      el.style.fontSize = (1.5 + Math.random() * 2.5) + 'rem';
+      el.style.animationDuration = (2 + Math.random() * 2) + 's';
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 4500);
+    }, i * 100);
+  }
+}
+</script>
+</body>
+</html>
